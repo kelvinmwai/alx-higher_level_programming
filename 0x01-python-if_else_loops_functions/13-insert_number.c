@@ -9,29 +9,43 @@
  */
 listint_t *insert_node(listint_t **head, int number)
 {
-	listint_t *node = *head, *new = malloc(sizeof(listint_t));
+	int flag = 0;
+	listint_t *new_node = NULL, *old_val = NULL, *new_val = NULL;
 
-	if (new == NULL)
+	if (head == NULL)
 		return (NULL);
-
-	new->n = number;
-	new->next = NULL;
-
-	if (node == NULL || new->n < node->n)
+	new_node = malloc(sizeof(listint_t));
+	if (!new_node)
+		return (NULL);
+	new_node->n = number, new_node->next = NULL;
+	if (*head == NULL)
 	{
-		new->next = node;
-		return (*head = new);
+		*head = new_node;
+		return (*head);
 	}
-
-	while (node)
+	old_val = *head;
+	if (number <= old_val->n)
 	{
-		if (!node->next || new->n < node->next->n)
-		{
-			new->next = node->next;
-			node->next = new;
-			return (node);
-		}
-		node = node->next;
+		new_node->next = old_val, *head = new_node;
+		return (*head);
 	}
-	return (NULL);
+	if (number > old_val->n && !old_val->next)
+	{
+		old_val->next = new_node;
+		return (new_node);
+	}
+	new_val = old_val->next;
+	while (old_val)
+	{
+		if (!new_val)
+			old_val->next = new_node, flag = 1;
+		else if (new_val->n == number)
+			old_val->next = new_node, new_node->next = new_val, flag = 1;
+		else if (new_val->n > number && old_val->n < number)
+			old_val->next = new_node, new_node->next = after, flag = 1;
+		if (flag)
+			break;
+	new_val = new_val->next, old_val = old_val->next;
+	}
+	return (new_node);
 }
