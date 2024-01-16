@@ -1,0 +1,2 @@
+me will be passed as arg to mysql cmd
+SELECT * FROM first_table;
